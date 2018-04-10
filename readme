@@ -1,11 +1,11 @@
 ETAPE 1  
 
 client 1 :
-keystore : client1.jks contient seulement sa clé privée
+keystore : client1.jks contient seulement sa clé privée et son certificat
 truststore trustclient1.jks (contient le certificat de la clé privée du serveur)
 
-client 1 :
-keystore : client2.jks contient seulement sa clé privée
+client 2 :
+keystore : client2.jks contient seulement sa clé privée et son certificat
 truststore trustclient2.jks (contient le certificat de la clé privée du serveur)
 
 serveur :
