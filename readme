@@ -18,7 +18,7 @@ Test : Tout est ok :-)
 ETAPE 2
 
 Maintenant, ajout dans le keystore du serveur de cette fameuse clef privée p12
-keystore : serveur.jks contient maintenant deux clés privées (alias **1** et *serveur*)
+keystore : serveur.jks contient maintenant deux clés privées (alias **1** et _**serveur**_)
 
 Test : Rien ne marche :-(
 
