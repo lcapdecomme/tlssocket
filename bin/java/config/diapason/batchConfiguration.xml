@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- [GENERATED] Générateur      : 2.0-alpha Socle           : 2.0-alpha 
+   Mipih Technique : 2.0-alpha -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+   xsi:schemaLocation="
+   http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+   http://www.springframework.org/schema/util
+   http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+ 
+   
+   <!-- Datasource applicative -->
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="${prop.driverClassName}" />
+       <property name="url" value="${prop.urlAppli}" />
+       <property name="username" value="${prop.usernameAppli}" />
+       <property name="password" value="${prop.passwordAppli}" />
+   </bean>
+ 
+   <bean id="mappingResources"
+       class="fr.mm.foundation.spring.PatternListMergerFactoryBean">
+       <property name="beanNames" value="socleMappings,.*Mappings" />
+   </bean>
+   
+   <!-- Ne pas écraser  "beanRegistry"  et depends-on="beanRegistry" du bean mySessionFactory-->
+   <bean id="beanRegistry" class="fr.mm.foundation.core.BeanRegistry" scope="singleton" factory-method="getInstance" />
+   
+   <bean primary="true" id="mySessionFactory"    depends-on="beanRegistry" class="fr.mm.foundation.persistence.hibernate.support.MSessionFactoryBean">
+       <property name="dataSource" ref="dataSource" />
+       <property name="mappingResources" ref="mappingResources" />
+       <property name="hibernateProperties">
+           <props>
+               <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+               <prop key="hibernate.format_sql">true</prop>
+           </props>
+       </property>
+   </bean>
+ 
+   <bean id="transactionManager"
+       class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+       <property name="sessionFactory">
+           <ref bean="mySessionFactory" />
+       </property>
+   </bean>
+ 
+ 
+   <!-- Datasource technique -->
+   <bean id="convergenceDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="${prop.driverClassName}" />
+       <property name="url" value="${prop.urlTech}" />
+       <property name="username" value="${prop.usernameTech}" />
+       <property name="password" value="${prop.passwordTech}" />
+   </bean>
+ 
+   <bean id="convergenceMappingResources" class="fr.mm.foundation.spring.ListMergerFactoryBean">
+       <property name="sourceLists">
+           <list>
+               <ref bean="socleMappings"/>
+               <ref bean="convergencecoreMappings-Extended"/>
+           </list>
+       </property>
+   </bean>
+ 
+   <bean primary="false" id="convergenceSessionFactory"
+       class="fr.mm.foundation.persistence.hibernate.support.MSessionFactoryBean">
+        <property name="dataSource" ref="convergenceDataSource" />
+       <property name="mappingResources" ref="convergenceMappingResources" />
+       <property name="hibernateProperties">
+           <props>
+               <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+               <prop key="hibernate.query.substitutions">true O, false N, false null</prop>
+               <prop key="hibernate.format_sql">true</prop>
+           </props>
+       </property>
+   </bean>
+ 
+   <bean id="convergenceTransactionManager"
+       class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+       <property name="sessionFactory">
+           <ref bean="convergenceSessionFactory" />
+       </property>
+   </bean>
+ 
+   <!-- bean autoflushEnabled -->
+   <bean name="autoflushEnabled" class="java.lang.Boolean">
+        <constructor-arg value="true"/>
+    </bean>
+ 
+</beans>

@@ -1,0 +1,38 @@
+<assembly>
+	<id>batch</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+    	<fileSet>
+	      <!-- On prend le contenu du dossier config -->
+    	  <directory>config</directory>
+  	    </fileSet>
+    </fileSets>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+		    <!-- On met le batch lui-même directement sous le dossier lib -->
+			<includes>
+				<include>${groupId}:${artifactId}</include>
+			</includes>
+			<outputDirectory>/lib</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+		<dependencySet>
+		    <!-- 
+		    	 On récupère toutes les dépendances runtime du batch et on les met dans lib/common.
+		         Attention : il ne faut pas avoir de dépendance SNAPSHOT sinon il y aura des erreurs
+		         à l'exécution du batch
+		     -->
+			<excludes>
+				<exclude>${groupId}:${artifactId}</exclude>
+				<!-- Exclusion des dépendances inutiles pour l'invocation de services à distance -->
+			</excludes>
+			<outputDirectory>/lib/common</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>		
+	</dependencySets>
+</assembly>

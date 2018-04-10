@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+   
+   <!-- Bean permettant de lire les variables systeme java passees en parametres -->
+   <bean id="propertyConfigurer"
+       class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+       <property name="locations">
+           <list>
+               <value>file:config/diapason.properties</value>
+           </list>
+       </property>
+   </bean>
+   
+   <!-- On active l'autowiring -->
+   <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+   
+   <!-- Contexte pour lancement distant
+         <import resource="classpath:/config/socle/serviceClientContext.xml" /> -->
+ 
+   <!-- Contexte pour lancement local -->
+   <import resource="classpath*:/config/*/hibernate-mapping.xml" />
+   <import resource="classpath:/config/diapason/batchConfiguration.xml" />
+   <import resource="classpath*:/config/*/persistanceContext.xml" />
+   <import resource="classpath*:/config/*/serviceContext.xml" />
+   <import resource="classpath*:/config/*/convergence-hibernate-mapping.xml" />
+   <import resource="classpath*:/config/*/convergence-persistanceContext.xml" />
+   <import resource="classpath*:/config/*/convergence-serviceContext.xml" />
+ 
+   <!-- Declaration du bean pour le batch de l'application Diapason -->
+   <bean id="batchDiapason" class="fr.mipih.diapason.server.BatchDiapason" />
+ 
+   <!-- Bean pour le socle -->
+   <bean id="resourcesLocation" class="fr.mm.foundation.spring.NullableJndiObjectFactoryBean">
+       <property name="jndiName" value="resourcesLocation" />
+       <property name="valueIfAbsent" value="." />
+   </bean>    
+ 
+   <!--  Données en contexte de l'application -->
+   <bean id="application.errors" class="java.util.ArrayList">
+   </bean>
+ 
+   <bean id="application.context" class="fr.mm.foundation.application.UserContext">
+       <property name="errors" ref="application.errors"/>
+   </bean>
+ 
+</beans>
