@@ -17,44 +17,42 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 public class TLSServer
 {
+	private static final int PORT = 8000;
 
-	static final int port = 8000;
-
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
+		// on définit le key store et trustu store pour le serveur
+		defineCustomKeyStoreAndTrustStoreForServer();
 
-		System.setProperty("javax.net.ssl.keyStore", "keys/serveur.jks");
-		System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
-
-		System.setProperty("javax.net.ssl.trustStore", "keys/trustserveur.jks");
-		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-
-		SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory
+		final SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory
 				.getDefault();
 
-		try
-		{
-			ServerSocket sslServerSocket = sslServerSocketFactory.createServerSocket(port);
-			System.out.println("SSL ServerSocket started");
-			System.out.println(sslServerSocket.toString());
+		ServerSocket sslServerSocket = sslServerSocketFactory.createServerSocket(
+		System.out.println("SSL ServerSocket started");
+		System.out.println(sslServerSocket.toString());
 
-			while (true)
-			{
-				Socket socket = sslServerSocket.accept();
-				System.out.println("ServerSocket accepted");
-
-				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
-				String line = bufferedReader.readLine();
-				System.out.println(line);
-				out.println("Salut " + line);
-			}
-		}
-		catch (IOException ex)
+		while (true)
 		{
-			Logger.getLogger(TLSServer.class.getName()).log(Level.SEVERE, null, ex);
+			Socket socket = sslServerSocket.accept();
+			System.out.println("ServerSocket accepted");
+
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+
+			System.out.println("before readLine()");
+			String line = bufferedReader.readLine();
+			System.out.println(line);
+			out.println("Salut " + line);
 		}
+
 	}
 
+	private static void defineCustomKeyStoreAndTrustStoreForServer()
+	{
+		System.setProperty("javax.net.ssl.keyStore", "keys/serveur.jks");
+		System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+		System.setProperty("javax.net.ssl.trustStore", "keys/trustserveur.jks");
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+	}
 }
