@@ -27,7 +27,7 @@ public class TLSServer
 		final SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory
 				.getDefault();
 
-		ServerSocket sslServerSocket = sslServerSocketFactory.createServerSocket(
+		ServerSocket sslServerSocket = sslServerSocketFactory.createServerSocket(PORT);
 		System.out.println("SSL ServerSocket started");
 		System.out.println(sslServerSocket.toString());
 
