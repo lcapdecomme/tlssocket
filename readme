@@ -18,7 +18,7 @@ Test : Tout est ok :-)
 ETAPE 2
 
 Maintenant, ajout dans le keystore du serveur de cette fameuse clef privée p12
-keystore : serveur.jks contient maintenant deux clés privées (alias 1 et serveur)
+keystore : serveur.jks contient maintenant deux clés privées (alias **1** et *serveur*)
 
 Test : Rien ne marche :-(
 
@@ -30,7 +30,7 @@ trustclient2.jks contient maintenant deux certificats : celui de la clef privée
 
 
 Test : 	client 1 ne marche pas :-(    
-		client 2 marche :-)
+	client 2 marche :-)
 
 
 
